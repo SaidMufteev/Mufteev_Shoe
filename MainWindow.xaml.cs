@@ -25,6 +25,8 @@ namespace Mufteev_Shoe
             InitializeComponent();
 
             Manager.MainFrame = MainFrame;
+
+            MainFrame.Navigate(new AuthPage());
         }
 
         private void MainFrame_ContentRendered(object sender, EventArgs e)

@@ -13,5 +13,49 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10" VerticalAlignment="Center">
+
+            <TextBlock Text="Поиск: " VerticalAlignment="Center" FontSize="16" Margin="10,0,5,0"/>
+            <TextBox Name="TBoxSearch" Width="200" Height="25" VerticalAlignment="Center" TextChanged="TBoxSearch_TextChanged"/>
+
+            <TextBlock Text="Сортировка: " VerticalAlignment="Center" FontSize="16" Margin="20,0,5,0"/>
+            <ComboBox Name="ComboSort" Width="150" Height="25" SelectionChanged="ComboSort_SelectionChanged">
+                <ComboBoxItem Content="Без сортировки"/>
+                <ComboBoxItem Content="Стоимость (по возрастанию)"/>
+                <ComboBoxItem Content="Стоимость (по убыванию)"/>
+            </ComboBox>
+
+            <TextBlock Text="Производитель: " VerticalAlignment="Center" FontSize="16" Margin="20,0,5,0"/>
+            <ComboBox Name="ComboFilter" Width="180" Height="25" SelectionChanged="ComboFilter_SelectionChanged" DisplayMemberPath="manufacturer_name"/>
+        </StackPanel>
+
+        <ListView Name="ProductListView" Grid.Row="1" Margin="10" Background="Transparent" BorderThickness="0">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Background="{Binding CardBackground}" Margin="5" Width="750">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Изображение товара -->
+                        <Image Source="{Binding CorrectImagePath}" Width="150" Height="150" Grid.Column="0" Stretch="Uniform" HorizontalAlignment="Center" Margin="10"/>
+
+                        <!-- Характеристики обуви -->
+                        <StackPanel Grid.Column="1" Margin="10" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding title}" FontSize="18" FontWeight="Bold" TextWrapping="Wrap" Margin="0,0,0,5"/>
+                            <TextBlock Text="{Binding manufacturers.manufacturer_name, StringFormat={}Производство: {0}}" FontSize="14" Foreground="Gray" Margin="0,0,0,5"/>
+                            <TextBlock Text="{Binding composition, StringFormat={}Состав: {0}}" FontSize="14" TextWrapping="Wrap" Foreground="#333333" Margin="0,0,0,5"/>
+
+                            <!-- Выводим остаток на складе текстом для визуальной проверки -->
+                            <TextBlock Text="{Binding TotalQuantity, StringFormat={}Остаток на складе: {0} шт.}" FontSize="14" FontWeight="SemiBold" Foreground="DarkSlateGray" Margin="0,0,0,5"/>
+
+                            <TextBlock Text="{Binding price, StringFormat={}{0:N0} руб.}" FontSize="18" FontWeight="SemiBold" Foreground="#70B2AF" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>
