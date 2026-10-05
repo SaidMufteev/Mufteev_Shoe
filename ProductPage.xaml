@@ -6,30 +6,44 @@
       xmlns:local="clr-namespace:Mufteev_Shoe"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="ProductPage" FontFamily="Calibri">
+      Title="ProductPage" FontFamily="Calibri"
+      IsVisibleChanged="Page_IsVisibleChanged">
 
     <Grid Background="#D2F6E7">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
+            <!-- Верхняя панель управления -->
             <RowDefinition Height="*"/>
+            <!-- Список товаров -->
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10" VerticalAlignment="Center">
+        <!-- Основной вертикальный контейнер для всей верхней панели -->
+        <StackPanel Grid.Row="0" Margin="10">
 
-            <TextBlock Text="Поиск: " VerticalAlignment="Center" FontSize="16" Margin="10,0,5,0"/>
-            <TextBox Name="TBoxSearch" Width="200" Height="25" VerticalAlignment="Center" TextChanged="TBoxSearch_TextChanged"/>
+            <!-- 1. Строка с фильтрами, поиском и сортировкой -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Поиск:" VerticalAlignment="Center" FontSize="16" Margin="10,0,5,0"/>
+                <TextBox Name="TBoxSearch" Width="200" Height="25" VerticalAlignment="Center" TextChanged="TBoxSearch_TextChanged"/>
 
-            <TextBlock Text="Сортировка: " VerticalAlignment="Center" FontSize="16" Margin="20,0,5,0"/>
-            <ComboBox Name="ComboSort" Width="150" Height="25" SelectionChanged="ComboSort_SelectionChanged">
-                <ComboBoxItem Content="Без сортировки"/>
-                <ComboBoxItem Content="Стоимость (по возрастанию)"/>
-                <ComboBoxItem Content="Стоимость (по убыванию)"/>
-            </ComboBox>
+                <TextBlock Text="Сортировка:" VerticalAlignment="Center" FontSize="16" Margin="20,0,5,0"/>
+                <ComboBox Name="ComboSort" Width="150" Height="25" SelectionChanged="ComboSort_SelectionChanged">
+                    <ComboBoxItem Content="Без сортировки"/>
+                    <ComboBoxItem Content="Стоимость (по возрастанию)"/>
+                    <ComboBoxItem Content="Стоимость (по убыванию)"/>
+                </ComboBox>
 
-            <TextBlock Text="Производитель: " VerticalAlignment="Center" FontSize="16" Margin="20,0,5,0"/>
-            <ComboBox Name="ComboFilter" Width="180" Height="25" SelectionChanged="ComboFilter_SelectionChanged" DisplayMemberPath="manufacturer_name"/>
+                <TextBlock Text="Производитель:" VerticalAlignment="Center" FontSize="16" Margin="20,0,5,0"/>
+                <ComboBox Name="ComboFilter" Width="180" Height="25" SelectionChanged="ComboFilter_SelectionChanged" DisplayMemberPath="manufacturer_name"/>
+
+                <!-- Кнопка открытия корзины справа от фильтров -->
+                <Button Name="BtnGoToCart" Content="Открыть корзину" Width="140" Height="25" Click="BtnGoToCart_Click" Margin="20,0,0,0"/>
+            </StackPanel>
+
+            <!-- 2. Отдельная строка для кнопки добавления нового товара -->
+            <Button Name="BtnAddProduct" Content="Добавить товар" Width="150" Height="30" HorizontalAlignment="Left" Margin="10,5,0,5" Click="BtnAddProduct_Click"/>
         </StackPanel>
 
+        <!-- Список товаров -->
         <ListView Name="ProductListView" Grid.Row="1" Margin="10" Background="Transparent" BorderThickness="0">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -52,6 +66,16 @@
                             <TextBlock Text="{Binding TotalQuantity, StringFormat={}Остаток на складе: {0} шт.}" FontSize="14" FontWeight="SemiBold" Foreground="DarkSlateGray" Margin="0,0,0,5"/>
 
                             <TextBlock Text="{Binding price, StringFormat={}{0:N0} руб.}" FontSize="18" FontWeight="SemiBold" Foreground="#70B2AF" Margin="0,5,0,0"/>
+
+                            <!-- Блок выбора размера обуви и добавления в корзину -->
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock Text="Размер: " VerticalAlignment="Center" FontSize="16"/>
+                                <ComboBox Name="ComboSizes" Width="80" Height="25" ItemsSource="{Binding stock_items}" DisplayMemberPath="sizes.size_value"/>
+                                <Button Name="BtnAddToCart" Content="В корзину" Width="100" Height="25" Click="BtnAddToCart_Click" Loaded="BtnAddToCart_Loaded" Margin="15,0,0,0" Background="#70B2AF" Foreground="White"/>
+                            </StackPanel>
+
+                            <!-- Кнопка редактирования внутри карточки каждого товара -->
+                            <Button Name="BtnEditProduct" Content="Редактировать" Width="130" Height="25" Click="BtnEditProduct_Click" HorizontalAlignment="Left" Margin="0,10,0,0"/>
                         </StackPanel>
                     </Grid>
                 </DataTemplate>
